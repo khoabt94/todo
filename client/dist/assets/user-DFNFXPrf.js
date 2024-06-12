@@ -1,0 +1,1 @@
+import{R as n,a6 as s,Q as a,a7 as o,a8 as u}from"./index-DxBtr4UR.js";const c=()=>{const{setUser:t}=n();return s({mutationKey:[a.USER.UPDATE_MY_INFO],mutationFn:o,onSuccess:e=>{t(e.user)}})},i=()=>s({mutationKey:[a.USER.CHANGE_PASSWORD],mutationFn:u});export{i as a,c as u};

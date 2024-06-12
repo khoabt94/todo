@@ -1,0 +1,7 @@
+export enum Status {
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED"
+}
