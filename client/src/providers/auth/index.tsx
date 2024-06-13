@@ -1,9 +1,9 @@
-import { ReactNode, useEffect } from "react"
-import { useAuthStore } from "@/store"
 import AppLoading from "@/components/ui/app-loading"
+import { useAuthStore } from "@/store"
+import { ReactNode, useEffect } from "react"
+
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-
     const { isFetchingUser, refreshToken, setIsFetchingUser } = useAuthStore()
     const handleRefreshToken = async () => {
         try {
@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsFetchingUser(false)
         }
     }
+
+
 
     useEffect(() => {
         handleRefreshToken()

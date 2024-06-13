@@ -3,6 +3,7 @@ import initMiddlewares from './src/utils/init/middlewares'
 import initDb from './src/utils/init/db'
 import initRoutes from './src/utils/init/routes'
 import initErrorHandler from './src/utils/init/error-handler'
+import initSocket from './src/utils/init/socket'
 
 const app = express();
 
@@ -13,6 +14,7 @@ const dataBaseUrl = process.env.DATABASE_URL?.replace('<PASSWORD>', process.env.
 
 initMiddlewares(app);
 initDb(dataBaseUrl)
+initSocket()
 initRoutes(app);
 initErrorHandler(app);
 

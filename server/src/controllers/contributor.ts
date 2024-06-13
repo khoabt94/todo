@@ -3,6 +3,7 @@ import { CustomRequest } from '@/interfaces/request';
 import { IUser } from '@/interfaces/user';
 import { ProjectModel, TodoModel, UserModel } from '@/models';
 import catchAsync from '@/utils/catch-async';
+import { io } from '@/utils/init/socket';
 import { NextFunction, Request, Response } from 'express';
 
 const addContributor = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -44,7 +45,7 @@ const addContributor = catchAsync(async (req: CustomRequest, res: Response, next
   }, {
     new: true,
   })
-
+  io.emit('add-contributor', { project: newProject })
   res.status(201).json({
     status: 'success',
     data: {
@@ -74,6 +75,7 @@ const deleteContributor = catchAsync(async (req: CustomRequest, res: Response, n
     new: true,
   })
 
+  io.emit('remove-contributor', { project: newProject })
   res.status(201).json({
     status: 'success',
     data: {

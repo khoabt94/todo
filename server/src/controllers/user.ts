@@ -23,7 +23,7 @@ const verify = catchAsync(async (req: CustomRequest, res: Response, next: NextFu
   const receivedToken = authorization.replace('Bearer ', '')
 
   const decoded = jwt.verify(receivedToken, process.env.JWT_SECRET_KEY as string) as JwtPayload
-  const user = await UserModel.findById(decoded.id).select('+password')
+  const user = await UserModel.findById(decoded.id)
 
   if (!user) {
     return next(new CustomError({
