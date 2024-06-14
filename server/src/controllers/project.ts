@@ -17,22 +17,7 @@ const getProjects = catchAsync(async (req: CustomRequest, res: Response) => {
 })
 
 const getProject = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
-  const { user } = req
-  const project = await ProjectModel.findById(req.params.projectId)
-
-  if (!project) {
-    return next(new CustomError({
-      message: 'Project not found',
-      statusCode: 400,
-    }))
-  }
-
-  if (!project.owner.equals(user._id) && !project.contributors.includes(user._id)) {
-    return next(new CustomError({
-      message: 'You cant view a project that you are not joined',
-      statusCode: 401,
-    }))
-  }
+  const { project } = req
 
   res.status(200).json({
     status: 'success',

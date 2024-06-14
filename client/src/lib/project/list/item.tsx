@@ -1,6 +1,8 @@
 import { Project } from '@/interfaces'
 import { NavLink } from 'react-router-dom'
 import { MenuActions } from './menu'
+import { useAuthStore } from '@/store'
+import { useMemo } from 'react'
 
 type Props = {
   project: Project.Detail
@@ -8,6 +10,13 @@ type Props = {
 }
 
 export function ProjectItem({ project, onClick }: Props) {
+  const { user } = useAuthStore()
+
+  const showActionBtns = useMemo(() => {
+    if (!user) return false;
+    return project.owner._id === user._id
+  }, [project, user])
+
   return (
     <NavLink
       className={({ isActive }) =>
@@ -21,7 +30,8 @@ export function ProjectItem({ project, onClick }: Props) {
         <p className=''>
           {project.title}
         </p>
-        <MenuActions project={project} onClick={onClick} />
+        {showActionBtns ? <MenuActions project={project} onClick={onClick} /> : null}
+
       </div>
     </NavLink>
   )

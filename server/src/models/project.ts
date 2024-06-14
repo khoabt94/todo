@@ -40,7 +40,7 @@ const ProjectSchema = new Schema({
 // ProjectSchema.index({ title: 1, owner: 1 }, { unique: true })
 
 ProjectSchema.pre(/^find/, function (next) {
-  (this as any).populate('contributors', 'name email _id avatar')
+  (this as any).populate('contributors', 'name email _id avatar').populate('owner', 'name email _id avatar')
   next();
 })
 

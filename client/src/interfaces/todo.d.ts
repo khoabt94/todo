@@ -1,5 +1,6 @@
 import { Priority, Status } from "@/enums"
 import { Project } from "./project"
+import { User } from "./user"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export namespace Todo {
@@ -14,6 +15,7 @@ export namespace Todo {
         status: Status
         priority: Priority
         project: Project.Detail
+        creator: User.Detail
     }
 
     interface StatusCount {

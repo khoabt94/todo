@@ -9,7 +9,7 @@ export namespace Project {
         title: string
         updatedAt: string
         description: string
-        owner: string
+        owner: User.Detail
         contributors: User.Detail[]
     }
 }

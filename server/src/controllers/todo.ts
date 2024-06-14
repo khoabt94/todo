@@ -1,11 +1,13 @@
 import { CustomError } from '@/constants/error';
 import { ProjectModel, TodoModel } from '@/models';
-import { IUser } from '@/interfaces/user';
+import { IUser, IUserMethods } from '@/interfaces/user';
 import catchAsync from '@/utils/catch-async';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { CustomRequest } from '@/interfaces/request';
 import { QueryFeatures } from '@/utils/query-features';
+import { findUserSocket } from './socket-user';
+import { io } from '@/utils/init/socket';
 
 const invalidQuery = ['sort', 'page', 'limit', 'status']
 // server: { deadline: { $gte: ISODate("2021-01-01"), $lt: ISODate("2020-05-01"} }
@@ -118,10 +120,14 @@ const getTodo = catchAsync(async (req: Request, res: Response, next: NextFunctio
 })
 
 const createTodo = catchAsync(async (req: CustomRequest, res: Response) => {
+  const { projectId } = req.params
   const newTodo = await TodoModel.create({
     ...req.body,
     creator: req.user._id
   })
+
+
+  io.to(projectId).emit('create-todo', { todo: newTodo })
 
   res.status(201).json({
     status: 'success',
@@ -131,6 +137,7 @@ const createTodo = catchAsync(async (req: CustomRequest, res: Response) => {
 })
 
 const updateTodo = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { projectId } = req.params
   const newTodo = await TodoModel.findByIdAndUpdate(req.params.todoId, req.body, {
     new: true,
     runValidators: true
@@ -142,6 +149,8 @@ const updateTodo = catchAsync(async (req: Request, res: Response, next: NextFunc
       statusCode: 404,
     }))
   }
+
+  io.to(projectId).emit('update-todo', { todo: newTodo })
 
   res.status(201).json({
     status: 'success',

@@ -5,6 +5,7 @@ import { ProjectModel, TodoModel, UserModel } from '@/models';
 import catchAsync from '@/utils/catch-async';
 import { io } from '@/utils/init/socket';
 import { NextFunction, Request, Response } from 'express';
+import { findUserSocket } from './socket-user';
 
 const addContributor = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
   const { user, project } = req
@@ -30,8 +31,7 @@ const addContributor = catchAsync(async (req: CustomRequest, res: Response, next
   }
 
   /// check email already exist on contributors
-  const isContributor = project.contributors.includes(findUser._id)
-
+  const isContributor = project.contributors.find((con: any) => con._id.equals(String(findUser._id)))
 
   if (isContributor) {
     return next(new CustomError({
@@ -45,7 +45,14 @@ const addContributor = catchAsync(async (req: CustomRequest, res: Response, next
   }, {
     new: true,
   })
-  io.emit('add-contributor', { project: newProject })
+
+  const userSocket = findUserSocket(String(findUser._id))
+  if (userSocket) {
+    io.to(userSocket).emit('add-contributor', { project: newProject })
+    io.sockets.sockets.get(userSocket)?.join(String(newProject?._id))
+  }
+
+
   res.status(201).json({
     status: 'success',
     data: {
@@ -74,8 +81,9 @@ const deleteContributor = catchAsync(async (req: CustomRequest, res: Response, n
   }, {
     new: true,
   })
+  const userSocket = findUserSocket(contributorId)
+  if (userSocket) io.to(userSocket).emit('remove-contributor', { project: newProject })
 
-  io.emit('remove-contributor', { project: newProject })
   res.status(201).json({
     status: 'success',
     data: {

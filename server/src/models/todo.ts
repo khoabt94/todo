@@ -54,7 +54,7 @@ TodoSchema.index({ status: 1 });
 
 TodoSchema.pre(/^find/, function (next) {
   //@ts-ignore
-  this.populate('project')
+  this.populate('project').populate('creator', 'name email _id avatar')
   next()
 })
 

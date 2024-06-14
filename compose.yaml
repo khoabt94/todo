@@ -17,6 +17,7 @@ services:
     build: ./server
     ports:
       - 3000:3000
+      - 8000:8000
     develop:
       watch:
         - path: ./server/package.json
