@@ -28,6 +28,5 @@ export const createTodo = async (
 export const updateTodo = async (
   { project, todo_id, ...data }: Api.TodoApi.UpdateTodoPayload
 ): Promise<Api.TodoApi.UpdateTodoResponse> => {
-  console.log(project);
   return await AxiosInstance.patch(`${BASE_URL(project)}/${todo_id}`, data);
 };
